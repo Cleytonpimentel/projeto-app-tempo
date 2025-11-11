@@ -1,0 +1,86 @@
+:root{
+    --accent: #0078ff;
+    --card-bg: #fff;
+    --muted: #666;
+    --light: #f7f9fb;
+}
+
+*{box-sizing:border-box}
+body{
+    font-family: "Poppins", Arial, sans-serif;
+    background: #fff;
+    margin:0;
+    padding:0;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    min-height:100vh;
+}
+
+.container{
+    width:420px;
+    margin-top:28px;
+    padding:28px;
+    border-radius:14px;
+    box-shadow:0 6px 24px rgba(0,0,0,0.08);
+    background:var(--card-bg);
+    text-align:center;
+}
+
+h1{ color:var(--accent); margin:0 0 18px; font-size:1.6rem; }
+
+.search-box{ display:flex; gap:10px; margin-bottom:18px; }
+.search-box input{
+    flex:1; padding:10px 12px; border-radius:8px; border:1px solid #ddd; font-size:14px;
+}
+.search-box button{
+    background:var(--accent); color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer;
+}
+
+.weather-box{
+    border:2px solid var(--accent);
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:18px;
+}
+#temperature{ font-size:2.6rem; color:var(--accent); margin:6px 0; }
+.weather-box img{ width:72px; height:72px; object-fit:contain; display:block; margin:6px auto; }
+
+.forecast-title{ color:var(--accent); font-weight:600; margin:6px 0 12px; display:flex; align-items:center; justify-content:center; gap:8px; }
+
+.forecast-container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:12px;
+}
+
+/* Card diário */
+.forecast-card{
+    width:110px;
+    background:var(--light);
+    border-radius:12px;
+    padding:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+    transition: transform .22s cubic-bezier(.2,.9,.2,1), box-shadow .22s;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.forecast-card img{ width:44px; height:44px; object-fit:contain; margin:6px 0; }
+.forecast-card h4{ margin:0; color:var(--accent); text-transform:lowercase; font-weight:700; font-size:0.95rem; }
+.forecast-card .temps{ margin:6px 0; font-weight:600; color:#222; }
+.forecast-card .desc{ font-size:0.85rem; color:var(--muted); text-transform:lowercase; margin:2px 0; }
+.forecast-card .small-date{ font-size:0.75rem; color:#aaa; margin-top:6px; }
+
+/* hover */
+.forecast-card:hover{
+    transform: scale(1.12);
+    box-shadow: 0 10px 30px rgba(0,120,255,0.18);
+    background:#fff;
+}
+.small-date {
+    font-size: 0.78rem;
+    color: #9aa3b2;
+    margin-top: 6px;
+}
