@@ -2,11 +2,16 @@
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Previsão do Tempo</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+<button id="toggle-theme">☀️</button>
+
 <div class="container">
     <h1>🌤️ Previsão do Tempo</h1>
 
@@ -17,18 +22,29 @@
 
     <div id="weather-result" class="weather-box" style="display:none;">
         <h2 id="city-name"></h2>
-        <h3 id="temperature"></h3>
-        <img id="weather-icon" src="" alt="ícone do clima">
-        <p id="description"></p>
-        <p id="details"></p>
+        <p id="current-date" class="date"></p>
+        <div class="main-weather">
+            <img id="weather-icon" src="" alt="ícone do clima">
+            <div>
+                <h3 id="temperature"></h3>
+                <p id="description"></p>
+                <p id="details"></p>
+            </div>
+        </div>
     </div>
 
     <div id="forecast" style="display:none;">
         <h3 class="forecast-title">📅 Previsão para os próximos dias</h3>
         <div id="forecast-container" class="forecast-container"></div>
     </div>
+
+    <div class="chart-box" style="display:none;">
+        <h3 class="forecast-title">📈 Variação de Temperatura</h3>
+        <canvas id="tempChart"></canvas>
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

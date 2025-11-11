@@ -4,8 +4,8 @@ import com.example.apptempo.dto.ForecastResponseDTO;
 import com.example.apptempo.dto.GeoResponseDTO;
 import com.example.apptempo.dto.OneCallDTO;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -35,14 +35,11 @@ public class WeatherService {
         this.restTemplate = restTemplate;
     }
 
+    @Cacheable("clima")
     public ForecastResponseDTO getForecastForCity(String city) {
         String cityClean = city.trim();
         GeoResponseDTO geoData = getCoordinatesForCity(cityClean);
-
-        if (geoData == null) {
-            System.out.println("ERRO 404 (Geo): Cidade não encontrada: " + cityClean);
-            return null;
-        }
+        if (geoData == null) return null;
 
         try {
             URI oneCallUri = UriComponentsBuilder.fromHttpUrl(oneCallApiUrl)
@@ -54,10 +51,8 @@ public class WeatherService {
                     .queryParam("exclude", "minutely,hourly,alerts")
                     .build().toUri();
 
-            System.out.println("Buscando Previsão: " + oneCallUri);
             OneCallDTO oneCallResponse = restTemplate.getForObject(oneCallUri, OneCallDTO.class);
             return mapToForecastResponse(oneCallResponse, geoData.name);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,37 +75,31 @@ public class WeatherService {
     private ForecastResponseDTO mapToForecastResponse(OneCallDTO raw, String cityName) {
         if (raw == null || raw.current == null || raw.daily == null) return null;
 
-        // Formato de data: 10/11/2025
         var formatter = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        // Data atual (para o "current")
         String currentDate = java.time.LocalDate.now().format(formatter);
 
-        // Previsão atual
         ForecastResponseDTO.CurrentWeather current = new ForecastResponseDTO.CurrentWeather(
                 cityName,
                 raw.current.temp,
                 raw.current.feelsLike,
                 raw.current.humidity,
                 raw.current.weather.isEmpty() ? "N/A" : raw.current.weather.get(0).description,
-                currentDate // <-- adiciona a data de hoje
+                currentDate
         );
 
-        // Previsões dos próximos dias
         List<ForecastResponseDTO.DailyForecast> daily = raw.daily.stream()
-                .skip(1) // pula o dia atual
-                .limit(7) // limita a 7 dias
+                .skip(1)
+                .limit(7)
                 .map(d -> {
                     LocalDate data = Instant.ofEpochSecond(d.dt)
                             .atZone(ZoneId.systemDefault())
                             .toLocalDate();
                     String dayOfWeek = data.getDayOfWeek()
-                            .getDisplayName(TextStyle.SHORT, brasilLocale); // ex: "Ter."
-                    String dateFormatted = data.format(formatter); // ex: "11/11/2025"
-
+                            .getDisplayName(TextStyle.SHORT, brasilLocale);
+                    String dateFormatted = data.format(formatter);
                     return new ForecastResponseDTO.DailyForecast(
                             dayOfWeek,
-                            dateFormatted, // <-- data correspondente
+                            dateFormatted,
                             d.temp.min,
                             d.temp.max,
                             d.weather.isEmpty() ? "N/A" : d.weather.get(0).description
@@ -119,10 +108,5 @@ public class WeatherService {
                 .collect(Collectors.toList());
 
         return new ForecastResponseDTO(current, daily);
-    }
-
-    private String formatTimestampToDayOfWeek(long timestamp) {
-        return Instant.ofEpochSecond(timestamp).atZone(ZoneId.systemDefault())
-                .toLocalDate().getDayOfWeek().getDisplayName(TextStyle.SHORT, brasilLocale);
     }
 }
