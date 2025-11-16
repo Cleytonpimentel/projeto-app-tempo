@@ -126,3 +126,7 @@ Este projeto foi desenvolvido com dedicação por:
 Cleyton Santos
 
 Luis Fernando
+
+José Anderson
+
+Matheus Gomes
