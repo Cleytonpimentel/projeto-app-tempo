@@ -5,7 +5,6 @@ document.getElementById("search-btn").addEventListener("click", fetchWeather);
 document.getElementById("city-input").addEventListener("keypress", (e) => {
     if (e.key === "Enter") fetchWeather();
 });
-document.getElementById("toggle-theme").addEventListener("click", toggleTheme);
 
 async function fetchWeather() {
     const city = document.getElementById("city-input").value.trim();
@@ -46,7 +45,7 @@ function renderWeather(data) {
     const temp = typeof current.temp === "number" ? Math.round(current.temp) : "—";
     const feelsLike = typeof current.feelsLike === "number" ? Math.round(current.feelsLike) : "—";
     const humidity = current.humidity ?? "—";
-    const description = current.description ?? "";
+    const description = current.description ?? ""; // <-- Já temos a descrição aqui
     const currentDate = current.date ?? (current.dt ? formatTimestampToDate(current.dt) : "");
 
     document.getElementById("city-name").textContent = cityName;
@@ -57,6 +56,8 @@ function renderWeather(data) {
     document.getElementById("weather-icon").src = getWeatherIconUrl(description);
     document.getElementById("weather-icon").alt = description || "ícone";
     document.getElementById("weather-result").style.display = "block";
+
+    updateDynamicBackground(description);
 
     const forecastContainer = document.getElementById("forecast-container");
     forecastContainer.innerHTML = "";
@@ -113,11 +114,34 @@ function drawChart(labels, max, min) {
     });
 }
 
-function toggleTheme() {
-    document.body.classList.toggle("dark-theme");
-    const theme = document.body.classList.contains("dark-theme") ? "🌙" : "☀️";
-    document.getElementById("toggle-theme").textContent = theme;
+function updateDynamicBackground(description) {
+    const body = document.body;
+
+    // Remove todos os temas anteriores para não haver conflito
+    body.classList.remove("theme-clear", "theme-clouds", "theme-rain", "theme-mist", "theme-snow", "dark-theme");
+
+    if (!description) {
+        body.classList.add("theme-clear"); // Padrão
+        return;
+    }
+
+    const desc = description.toLowerCase();
+
+    if (desc.includes("chuva") || desc.includes("tempestade") || desc.includes("garoa")) {
+        body.classList.add("theme-rain");
+    } else if (desc.includes("nuvem") || desc.includes("nublado") || desc.includes("nuvens")) {
+        body.classList.add("theme-clouds");
+    } else if (desc.includes("céu limpo") || desc.includes("limpo") || desc.includes("ensolarado") || desc.includes("sol")) {
+        body.classList.add("theme-clear");
+    } else if (desc.includes("névoa") || desc.includes("neblina") || desc.includes("mist")) {
+        body.classList.add("theme-mist");
+    } else if (desc.includes("neve") || desc.includes("granizo")) {
+        body.classList.add("theme-snow");
+    } else {
+        body.classList.add("theme-clear");
+    }
 }
+
 
 function formatTimestampToDate(ts) {
     if (!ts) return "";

@@ -13,6 +13,7 @@ public class OneCallDTO {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class CurrentData {
+        public Long dt; // <-- ESTA LINHA FOI ADICIONADA
         public Double temp;
         @JsonProperty("feels_like")
         public Double feelsLike;

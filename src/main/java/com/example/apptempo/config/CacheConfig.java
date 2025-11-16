@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @EnableCaching
 public class CacheConfig {
+
     @Bean
     public CaffeineCacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager("clima");

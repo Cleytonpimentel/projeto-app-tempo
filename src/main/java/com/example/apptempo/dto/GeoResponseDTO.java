@@ -4,7 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GeoResponseDTO {
-    public double lat;
-    public double lon;
-    public String name;
+
+    private double lat;
+    private double lon;
+    private String name;
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

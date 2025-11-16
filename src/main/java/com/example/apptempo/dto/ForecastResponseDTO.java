@@ -12,12 +12,12 @@ public record ForecastResponseDTO(
             Double feelsLike,
             Integer humidity,
             String description,
-            String date // <-- adicionamos a data do dia atual
+            String date
     ) {}
 
     public record DailyForecast(
             String dayOfWeek,
-            String date, // <-- adicionamos a data de cada dia
+            String date,
             Double minTemp,
             Double maxTemp,
             String description
