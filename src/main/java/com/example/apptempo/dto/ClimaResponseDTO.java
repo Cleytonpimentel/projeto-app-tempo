@@ -15,13 +15,13 @@ public class ClimaResponseDTO {
 
 
     public static class CurrentData {
-        private String cityName; // Nome da cidade (vamos adicionar no parser)
-        private String date; // Data formatada (vamos adicionar no parser)
+        private String cityName;
+        private String date;
         private Double temp;
         private Double feelsLike;
         private Integer humidity;
         private String description;
-        private Long dt; // Timestamp
+        private Long dt;
 
         // Getters e Setters
         public String getCityName() { return cityName; }
